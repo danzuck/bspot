@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require './hand'
 
 POKER_FILE = File.join(".", "poker.txt")
