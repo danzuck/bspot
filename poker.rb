@@ -52,7 +52,7 @@ File.open(POKER_FILE, "rb").each_with_index do |line, index|
     p2 = "(Win)"
     p1 = "(Lose)"
   end
-  printf("Player1 %7s : %s            Player2 %7s: %s\n", p1, leftHand.showHand, p2, rightHand.showHand)
+  printf("Player1 %7s : %s            Player2 %7s: %s\n", p1, leftHand.showHand, p2, rightHand.showHand) unless ARGV[0] =~ /s$/i
 
   STATS[:hands] = index+1
 end
