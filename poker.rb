@@ -12,13 +12,15 @@ STATS = {
     wins: 0,
     ties: 0,
     loss: 0,
-    high: nil
+    high: nil,
+    hands: Hash.new(0)
   },
   player2: {
     wins: 0,
     ties: 0,
     loss: 0,
-    high: nil
+    high: nil,
+    hands: Hash.new(0)
   }
 }
 
@@ -32,6 +34,8 @@ File.open(POKER_FILE, "rb").each_with_index do |line, index|
   leftHand = Hand.new( hands[0..4] )
   rightHand = Hand.new( hands[5..-1] )
 
+  STATS[:player1][:hands][leftHand.value] += 1 if leftHand.value > 1
+  STATS[:player2][:hands][rightHand.value] += 1 if rightHand.value > 1
   STATS[:player1][:high] = leftHand if STATS[:player1][:high].nil? || leftHand.value > STATS[:player1][:high].value
   STATS[:player2][:high] = rightHand if STATS[:player2][:high].nil? || rightHand.value > STATS[:player2][:high].value
   
@@ -65,6 +69,26 @@ puts "-"*120
 printf("%15s %10s %10s %10s %20s\n", "", "Wins", "Losses", "Ties", "Best Hand")
 printf("%15s %10s %10s %10s %20s\n", "Player1", STATS[:player1][:wins], STATS[:player1][:loss], STATS[:player1][:ties], STATS[:player1][:high])
 printf("%15s %10s %10s %10s %20s\n", "Player2", STATS[:player2][:wins], STATS[:player2][:loss], STATS[:player2][:ties], STATS[:player2][:high])
+
+puts ""
+printf("%15s", "")
+Hand::HAND_VALUES.each_pair do |val, hand|
+  next if val < 100
+  printf("%13s ", hand.sub(/ of a /,'/'))
+end
+
+printf("\n%15s", "Player1")
+Hand::HAND_VALUES.each_pair do |val, hand|
+  next if val < 100
+  printf("%13s ", STATS[:player1][:hands][val] )
+end
+
+printf("\n%15s", "Player2")
+Hand::HAND_VALUES.each_pair do |val, hand|
+  next if val < 100
+  printf("%13s ", STATS[:player2][:hands][val] )
+end
+printf("\n")
 
 puts ""
 puts "Rounds Played: #{STATS[:hands]}"
